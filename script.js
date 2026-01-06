@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'specials': ['assets/steak_dish.jpg', 'assets/arancini_salad.jpg']
     };
 
+    const suggestions = ['Menu Recommendations', 'Reserve a Table', 'Opening Hours', 'Dietary Options'];
+
     // --- Initialization ---
     initChat();
 

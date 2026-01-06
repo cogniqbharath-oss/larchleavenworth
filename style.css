@@ -534,8 +534,7 @@ footer {
     }
 
     .chat-toggle {
-        display: none;
-        /* Hide toggle if window is active */
+        /* display: none; Removed so chat works on mobile */
     }
 
     .chat-window.active~.chat-toggle {
