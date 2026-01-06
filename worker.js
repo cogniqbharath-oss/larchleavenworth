@@ -1,28 +1,30 @@
-
 export default {
-    async fetch(request, env) {
-        if (request.method === "OPTIONS") {
-            return new Response(null, {
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "POST, OPTIONS",
-                    "Access-Control-Allow-Headers": "Content-Type",
-                },
-            });
-        }
+  async fetch(request, env) {
+    // Handle CORS preflight requests
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      });
+    }
 
-        if (request.method !== "POST") {
-            return new Response("Only POST requests are allowed", { status: 405 });
-        }
+    // Only allow POST requests
+    if (request.method !== "POST") {
+      return new Response("Only POST requests are allowed", { status: 405 });
+    }
 
-        try {
-            const { message } = await request.json();
+    try {
+      const { message } = await request.json();
 
-            const apiKey = env.API_KEY_larch;
-            const modelId = "gemma-3-27b-it";
+      // Configuration from user requirements
+      const apiKey = env.API_KEY_larch;
+      const modelId = "gemma-3-27b-it";
 
-            // System prompt for Larch Leavenworth
-            const systemPrompt = `You are the friendly and knowledgeable digital concierge for Larch Leavenworth, a premium restaurant in Leavenworth, WA.
+      // System prompt for Larch Leavenworth
+      const systemPrompt = `You are the friendly and knowledgeable digital concierge for Larch Leavenworth, a premium restaurant in Leavenworth, WA.
       
       Your tone is: Warm, rustic-elegant, helpful, and concise.
       
@@ -39,30 +41,30 @@ export default {
       Instructions:
       - Answer the user's question directly.
       - If they ask for a table, direct them to the "Book a Table" button or mention Resy clearly.
-      - If unsure, suggest they call the number or email.
+      - If unsure, suggest they call the number or email. NEVER guess.
       - Keep responses short (under 3 sentences usually).
+      
+      Visuals:
+      - If the user asks for pictures of food, pasta, cocktails, or the interior, append a specific tag to the end of your response.
+      - Tags available: [SHOW_IMAGES: PASTA], [SHOW_IMAGES: COCKTAILS], [SHOW_IMAGES: INTERIOR].
+      - Example: "Here is a look at our handcrafted pasta! [SHOW_IMAGES: PASTA]"
       `;
 
-            // Construct the payload for Gemini API
-            // Note: The specific API structure depends on the provider (Google AI Studio vs Vertex).
-            // Assuming standard Google AI Studio "v1beta" format for ease of use in workers, 
-            // but configured for the specific model requested.
-            // If the user provided specific worker code in the past, I'm following standard practices here.
+      // Construct the payload for Gemini API
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`;
 
-            const url = \`https://generativelanguage.googleapis.com/v1beta/models/\${modelId}:generateContent?key=\${apiKey}\`;
-      
       const payload = {
         contents: [
           {
             role: "user",
             parts: [
-              { text: systemPrompt + "\\n\\nUser: " + message + "\\nConcierge:" }
+              { text: systemPrompt + "\n\nUser: " + message + "\nConcierge:" }
             ]
           }
         ],
         generationConfig: {
-            maxOutputTokens: 150,
-            temperature: 0.7
+          maxOutputTokens: 150,
+          temperature: 0.7
         }
       };
 
@@ -74,17 +76,17 @@ export default {
 
       if (!aiResponse.ok) {
         const errText = await aiResponse.text();
-        throw new Error(\`Gemini API Error: \${aiResponse.status} - \${errText}\`);
+        throw new Error(`Gemini API Error: ${aiResponse.status} - ${errText}`);
       }
 
       const aiData = await aiResponse.json();
-      // Extract text. Usually candidates[0].content.parts[0].text
+      // Extract text from the response
       const text = aiData.candidates?.[0]?.content?.parts?.[0]?.text || "I'm sorry, I couldn't generate a response.";
 
       return new Response(JSON.stringify({ response: text }), {
         headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
         }
       });
 
@@ -92,8 +94,8 @@ export default {
       return new Response(JSON.stringify({ error: error.message }), {
         status: 500,
         headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
         }
       });
     }

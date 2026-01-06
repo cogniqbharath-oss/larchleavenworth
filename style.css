@@ -514,3 +514,95 @@ footer {
         display: none; 
     }
 }
+
+/* Chatbot Enhancements */
+
+/* Timestamps */
+.message .timestamp {
+    display: block;
+    font-size: 0.7rem;
+    color: #999;
+    margin-top: 4px;
+    margin-left: 5px;
+}
+.message.user .timestamp {
+    text-align: right;
+    margin-right: 5px;
+}
+
+/* Suggestion Chips */
+.suggestion-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+}
+
+.chip {
+    background: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    color: var(--color-primary);
+}
+
+.chip:hover {
+    background: var(--color-secondary);
+    color: var(--color-primary);
+    border-color: var(--color-secondary);
+}
+
+/* Typing Indicator */
+.typing-indicator .bubble {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 1rem 1.2rem;
+}
+
+.typing-indicator span {
+    width: 6px;
+    height: 6px;
+    background: #ccc;
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+/* Image Gallery in Chat */
+.message.gallery {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    background: transparent;
+}
+.message.gallery img {
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+.message.gallery img:hover {
+    transform: scale(1.05);
+}
+
+/* Clear Chat Button (Header) */
+#clearChat:hover {
+    color: var(--color-secondary);
+    opacity: 1 !important;
+}
