@@ -11,8 +11,8 @@ PORT = 8000
 
 # --- CONFIGURATION ---
 # REPLACE THIS WITH YOUR ACTUAL GEMINI API KEY
-GEMINI_API_KEY = "YOUR_GEMINI_API_KEY" 
-MODEL_ID = "gemini-1.5-flash" # or gemma-2-27b-it if available, using 1.5 flash for reliability
+GEMINI_API_KEY = "AIzaSyCl_-Se613qrZ2IbPhP34npaKZDn4hUnjw" 
+MODEL_ID = "gemma-3-27b-it" # or gemma-2-27b-it if available, using 1.5 flash for reliability
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
@@ -28,7 +28,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
 
     def do_POST(self):
-        if self.path == '/api/chat':
+        if self.path == '/api/worker':
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
             
@@ -36,33 +36,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 data = json.loads(post_data.decode('utf-8'))
                 user_message = data.get('message', '')
                 
-                # System Prompt
-                system_prompt = """You are the friendly and knowledgeable digital concierge for Larch Leavenworth, a premium restaurant in Leavenworth, WA.
-      
-      Your tone is: Warm, rustic-elegant, helpful, and concise.
-      
-      Context needed to answer questions:
-      - Location: 10173 Titus Rd, Leavenworth, WA 98826.
-      - Main offerings: Handcrafted Pasta, Cocktails, Bar, Dinner.
-      - Vibe: Modern rustic, upscale but cozy, seasonal Northwest ingredients.
-      - Reservations: We use Resy for online reservations. It's highly recommended as we book out fast.
-      - Phone: (509) 398-3330
-      - Email: larchgmanager@gmail.com
-      - Instagram: @larch_leavenworth
-      - Hours: Open Daily 4:00 PM - 9:00 PM. Happy Hour 4pm - 5pm.
-      
-      Instructions:
-      - Answer the user's question directly.
-      - If they ask for a table, direct them to the "Book a Table" button or mention Resy clearly.
-      - If unsure, suggest they call the number or email. NEVER guess.
-      - Keep responses short (under 3 sentences usually).
-      
-      Visuals:
-      - If the user asks for pictures of food, pasta, cocktails, or the interior, append a specific tag to the end of your response.
-      - Tags available: [SHOW_IMAGES: PASTA], [SHOW_IMAGES: COCKTAILS], [SHOW_IMAGES: INTERIOR], [SHOW_IMAGES: SPECIALS].
-      - Example: "Here is a look at our handcrafted pasta! [SHOW_IMAGES: PASTA]"
-      """
-
+                system_prompt = data.get('systemPrompt', "You are a helpful AI assistant.")
+                
                 # Call Gemini API
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_ID}:generateContent?key={GEMINI_API_KEY}"
                 
