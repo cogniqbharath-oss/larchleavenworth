@@ -23,6 +23,10 @@ export async function onRequestPost(context) {
     const apiKey = env.API_KEY_larch;
     const modelId = "gemma-3-27b-it";
 
+    if (!apiKey) {
+      throw new Error("Missing 'API_KEY_larch' environment variable in Cloudflare Pages settings.");
+    }
+
     // Effective prompt
     const effectivePrompt = systemPrompt || "You are a helpful AI assistant.";
 
