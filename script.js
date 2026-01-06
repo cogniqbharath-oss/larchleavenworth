@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let messageCount = 0;
 
     // --- Configuration ---
-    const workerUrl = 'https://flat-mountain-27a4.cogniq-bharath.workers.dev/';
+    const workerUrl = '/api/chat';
     const foodImages = {
         'pasta': ['assets/chef_pasta.jpg', 'assets/pasta.png'],
         'cocktails': ['https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=300&auto=format&fit=crop'],

@@ -533,10 +533,6 @@ footer {
         border-radius: 0;
     }
 
-    .chat-toggle {
-        /* display: none; Removed so chat works on mobile */
-    }
-
     .chat-window.active~.chat-toggle {
         display: none;
     }
