@@ -46,7 +46,7 @@ export default {
       
       Visuals:
       - If the user asks for pictures of food, pasta, cocktails, or the interior, append a specific tag to the end of your response.
-      - Tags available: [SHOW_IMAGES: PASTA], [SHOW_IMAGES: COCKTAILS], [SHOW_IMAGES: INTERIOR].
+      - Tags available: [SHOW_IMAGES: PASTA], [SHOW_IMAGES: COCKTAILS], [SHOW_IMAGES: INTERIOR], [SHOW_IMAGES: SPECIALS].
       - Example: "Here is a look at our handcrafted pasta! [SHOW_IMAGES: PASTA]"
       `;
 

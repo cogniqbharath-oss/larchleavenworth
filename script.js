@@ -17,11 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Configuration ---
     const workerUrl = 'https://flat-mountain-27a4.cogniq-bharath.workers.dev/';
-    const suggestions = ['Menu', 'Hours', 'Location', 'Specials'];
     const foodImages = {
-        'pasta': ['pasta.png', 'https://images.unsplash.com/photo-1551183053-bf91b1dca034?q=80&w=300&auto=format&fit=crop'],
+        'pasta': ['assets/chef_pasta.jpg', 'assets/pasta.png'],
         'cocktails': ['https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=300&auto=format&fit=crop'],
-        'interior': ['interior.png']
+        'interior': ['assets/interior.png'],
+        'specials': ['assets/steak_dish.jpg', 'assets/arancini_salad.jpg']
     };
 
     // --- Initialization ---
