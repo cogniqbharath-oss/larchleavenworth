@@ -1,54 +1,32 @@
 export default {
   async fetch(request, env) {
-    // Handle CORS preflight requests
+    // Handle CORS
+    const corsHeaders = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    };
+
     if (request.method === "OPTIONS") {
-      return new Response(null, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type",
-        },
+      return new Response(null, { headers: corsHeaders });
+    }
+
+    if (request.method !== "POST") {
+      return new Response("Only POST requests are allowed", {
+        status: 405,
+        headers: corsHeaders
       });
     }
 
-    // Only allow POST requests
-    if (request.method !== "POST") {
-      return new Response("Only POST requests are allowed", { status: 405 });
-    }
-
     try {
-      const { message } = await request.json();
+      const { message, systemPrompt } = await request.json();
 
-      // Configuration from user requirements
+      // Configuration
       const apiKey = env.API_KEY_larch;
       const modelId = "gemma-3-27b-it";
 
-      // System prompt for Larch Leavenworth
-      const systemPrompt = `You are the friendly and knowledgeable digital concierge for Larch Leavenworth, a premium restaurant in Leavenworth, WA.
-      
-      Your tone is: Warm, rustic-elegant, helpful, and concise.
-      
-      Context needed to answer questions:
-      - Location: 10173 Titus Rd, Leavenworth, WA 98826.
-      - Main offerings: Handcrafted Pasta, Cocktails, Bar, Dinner.
-      - Vibe: Modern rustic, upscale but cozy, seasonal Northwest ingredients.
-      - Reservations: We use Resy for online reservations. It's highly recommended as we book out fast.
-      - Phone: (509) 398-3330
-      - Email: larchgmanager@gmail.com
-      - Instagram: @larch_leavenworth
-      - Hours: Open Daily 4:00 PM - 9:00 PM. Happy Hour 4pm - 5pm.
-      
-      Instructions:
-      - Answer the user's question directly.
-      - If they ask for a table, direct them to the "Book a Table" button or mention Resy clearly.
-      - If unsure, suggest they call the number or email. NEVER guess.
-      - Keep responses short (under 3 sentences usually).
-      
-      Visuals:
-      - If the user asks for pictures of food, pasta, cocktails, or the interior, append a specific tag to the end of your response.
-      - Tags available: [SHOW_IMAGES: PASTA], [SHOW_IMAGES: COCKTAILS], [SHOW_IMAGES: INTERIOR], [SHOW_IMAGES: SPECIALS].
-      - Example: "Here is a look at our handcrafted pasta! [SHOW_IMAGES: PASTA]"
-      `;
+      // Default generic prompt if none provided
+      const effectivePrompt = systemPrompt || "You are a helpful AI assistant.";
 
       // Construct the payload for Gemini API
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`;
@@ -58,12 +36,12 @@ export default {
           {
             role: "user",
             parts: [
-              { text: systemPrompt + "\n\nUser: " + message + "\nConcierge:" }
+              { text: effectivePrompt + "\n\nUser: " + message + "\nAssistant:" }
             ]
           }
         ],
         generationConfig: {
-          maxOutputTokens: 150,
+          maxOutputTokens: 250,
           temperature: 0.7
         }
       };
@@ -80,13 +58,12 @@ export default {
       }
 
       const aiData = await aiResponse.json();
-      // Extract text from the response
       const text = aiData.candidates?.[0]?.content?.parts?.[0]?.text || "I'm sorry, I couldn't generate a response.";
 
       return new Response(JSON.stringify({ response: text }), {
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
+          ...corsHeaders
         }
       });
 
@@ -95,7 +72,7 @@ export default {
         status: 500,
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
+          ...corsHeaders
         }
       });
     }
