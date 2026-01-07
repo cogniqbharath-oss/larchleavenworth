@@ -621,12 +621,33 @@ footer {
         height: 300px;
     }
 
+    .chatbot-widget {
+        bottom: 20px;
+        right: 20px;
+        width: auto;
+        height: auto;
+        /* Reset full screen overlay */
+    }
+
+    .chat-toggle {
+        /* Reset positioning relative to widget */
+        position: static;
+    }
+
     .chat-window {
+        position: fixed;
+        /* Break out of widget container */
+        top: 0;
+        left: 0;
         right: 0;
         bottom: 0;
         width: 100%;
-        height: 100vh;
+        height: 100%;
         border-radius: 0;
+        z-index: 2001;
+        /* Ensure above toggle */
+        margin: 0;
+        /* Reset any margins */
     }
 
     .chat-window.active~.chat-toggle {
