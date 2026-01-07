@@ -195,21 +195,61 @@ nav a:hover {
 .intro {
     padding: 6rem 0;
     text-align: center;
-    background: var(--color-bg);
+    background-color: var(--color-bg);
+    background-image: radial-gradient(#c9a96e 0.5px, transparent 0.5px);
+    background-size: 20px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.intro .container {
+    position: relative;
+    z-index: 2;
+}
+
+.intro-text {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 3rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(201, 169, 110, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    position: relative;
+}
+
+.intro-text::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px solid var(--color-secondary);
+    pointer-events: none;
 }
 
 .intro-text h2 {
     font-size: 3rem;
     color: var(--color-primary);
     margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.intro-text h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--color-secondary);
+    margin: 0.5rem auto 0;
 }
 
 .intro-text p {
-    max-width: 700px;
-    margin: 0 auto;
-    font-size: 1.1rem;
-    color: #555;
+    font-size: 1.2rem;
+    color: #4a4a4a;
     font-weight: 300;
+    line-height: 1.8;
 }
 
 /* Highlight Section */
@@ -252,6 +292,62 @@ nav a:hover {
     color: #555;
 }
 
+
+.intro-content {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+}
+
+.intro-image {
+    flex: 1;
+    position: relative;
+}
+
+.intro-image img {
+    width: 100%;
+    border-radius: 4px;
+    /* Slight rounding */
+    box-shadow: 20px 20px 0 var(--color-secondary);
+    /* Offset decorative shadow */
+    transition: transform 0.3s ease;
+}
+
+.intro-image:hover img {
+    transform: translateY(-5px);
+}
+
+.intro-text {
+    flex: 1;
+    /* Existing styles continue... */
+    padding: 3rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(201, 169, 110, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    position: relative;
+    text-align: left;
+    /* Better for side-by-side */
+}
+
+/* ... existing intro-text inner styles ... */
+
+/* Responsive adjustment for Intro */
+@media (max-width: 900px) {
+    .intro-content {
+        flex-direction: column;
+        gap: 3rem;
+    }
+
+    .intro-text {
+        text-align: center;
+    }
+
+    .intro-image img {
+        box-shadow: 10px 10px 0 var(--color-secondary);
+    }
+}
+
+/* Link Arrow Style (Moved down as it was overlapping in file view inference) */
 .link-arrow {
     color: var(--color-primary);
     font-weight: 600;
@@ -554,10 +650,21 @@ footer {
     margin-right: 5px;
 }
 
+/* Chat Header Icon */
+.chat-header-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 /* Suggestion Chips */
 .suggestion-chips {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    /* Vertical alignment */
+    align-items: flex-start;
+    /* Left align chips, don't stretch */
     gap: 0.5rem;
     margin-bottom: 1rem;
     padding-left: 0.5rem;

@@ -127,7 +127,15 @@ document.addEventListener('DOMContentLoaded', () => {
       - Phone: (509) 398-3330
       - Email: larchgmanager@gmail.com
       - Instagram: @larch_leavenworth
-      - Hours: Open Daily 4:00 PM - 9:00 PM. Happy Hour 4pm - 5pm.
+      - Hours: 
+        Monday-Thursday: 4pm-9pm
+        Friday-Saturday: 4pm-10pm
+        Sunday: 4pm-9pm
+        Happy Hour: Daily 4pm-5pm
+        
+      - Holiday Hours (Dec 13-14, 20-21, 27-28):
+        Saturday: 1pm-10pm
+        Sunday: 1pm-9pm
       
       Instructions:
       - Answer the user's question directly.
