@@ -49,6 +49,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Event Listeners ---
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            // Optional: Animate icon
+            mobileToggle.querySelector('i').classList.toggle('fa-times');
+            mobileToggle.querySelector('i').classList.toggle('fa-bars');
+        });
+    }
+
     if (chatToggle) {
         chatToggle.addEventListener('click', () => {
             chatWindow.classList.add('active');
